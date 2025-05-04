@@ -3,12 +3,12 @@
 Hero::Hero() {}
 Hero::~Hero() {}
 
-Hero::Hero(std::string _name) {
+Hero::Hero(std::string _name, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0) {
     name = _name;
-    xp = 0;
-    level = 1;
-    strength = 2;
-    hp = 10;
+    xp = _xp;
+    level = _level;
+    strength = _strength;
+    hp = _hp;
 }
 
 // Add xp and check for level up
@@ -37,21 +37,21 @@ void Hero::addXp(int xpToAdd) {
 // Getters
 
 // Returns Hp
-int Hero::getHp() {
+int Hero::getHp() const {
     return hp;
 }
 
 // Returns Strength
-int Hero::getStrength() {
+int Hero::getStrength() const {
     return strength;
 }
 
 // Returns level
-int Hero::getLevel() {
+int Hero::getLevel() const {
     return level;
 }
 
 // Returns Name
-std::string Hero::getName() {
+std::string Hero::getName() const {
     return name;
 }
