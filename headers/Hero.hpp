@@ -9,7 +9,7 @@ class Hero {
 public:
     Hero();
     ~Hero();
-    Hero(std::string, int, int, int, int);
+    Hero(std::string, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0);
 
     // Methods
     void addXp(int);
