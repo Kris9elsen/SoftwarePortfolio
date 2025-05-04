@@ -32,7 +32,7 @@ void GameLogic::loadHero() {
     while (std::getline (file, line)) {
         std::stringstream ss(line);
         std::string name;
-        int hp, strength, level, xp;
+        int hp, strength, level, xp, gold;
         std::string value;
 
         std::getline(ss, name, ',');
@@ -40,15 +40,17 @@ void GameLogic::loadHero() {
         std::getline(ss, value, ','); strength = std::stoi(value);
         std::getline(ss, value, ','); level = std::stoi(value);
         std::getline(ss, value, ','); xp = std::stoi(value);
+        std::getline(ss, value, ','); gold = std::stoi(value);
 
         std::cout << heros.size() << ": " << name 
                   << ", Hp = " << hp 
                   << ", Strength = " << strength 
                   << ", Level = " << level 
-                  << ", Xp = " << xp 
+                  << ", Xp = " << xp
+                  << ", Gold = " << gold
                   << std::endl;
 
-        heros.push_back(Hero(name, hp, strength, level, xp));
+        heros.push_back(Hero(name, hp, strength, level, xp, gold));
 
     }
 
@@ -65,7 +67,8 @@ void GameLogic::loadHero() {
                   << ", Hp = " << hero.getHp() 
                   << ", Strength = " << hero.getStrength() 
                   << ", Level = " << hero.getLevel() 
-                  << ", Xp = " << hero.getXp() 
+                  << ", Xp = " << hero.getXp()
+                  << ", Gold = " << hero.getGold()
                   << std::endl;
 
         return;
@@ -99,7 +102,7 @@ void GameLogic::saveHero() {
 
         if (currentHero == hero.getName()) {
             std::stringstream newLine;
-            newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp();
+            newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp() << "," << hero.getGold();
             lines.push_back(newLine.str());
             update = true;
         } else {
@@ -111,7 +114,7 @@ void GameLogic::saveHero() {
 
     if (!update) {
         std::stringstream newLine;
-        newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp();
+        newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp() << "," << hero.getGold();
         lines.push_back(newLine.str());
     }
 
@@ -190,7 +193,7 @@ void GameLogic::chooseCaveScreen() {
         if (in == "q") return;
 
         chooseEnemyScreen(std::stoi(in));
-        
+
     }
 
     return;
@@ -204,7 +207,8 @@ void GameLogic::chooseEnemyScreen(int cave) {
                 << ", Hp = " << hero.getHp() 
                 << ", Strength = " << hero.getStrength() 
                 << ", Level = " << hero.getLevel() 
-                << ", Xp = " << hero.getXp() 
+                << ", Xp = " << hero.getXp()
+                << ", Gold = " << hero.getGold()
                 << std::endl;
         
         std::cout << "\n The enemies in the cave are " << std::endl;
