@@ -1,9 +1,9 @@
 #ifndef HERO_HPP
 #define HERO_HPP
 
-#include <string>
-
 #pragma once
+
+#include <string>
 
 class Hero {
 public:
