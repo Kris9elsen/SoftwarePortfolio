@@ -51,6 +51,10 @@ int Hero::getLevel() const {
     return level;
 }
 
+int Hero::getXp() const {
+    return xp;
+}
+
 // Returns Name
 std::string Hero::getName() const {
     return name;

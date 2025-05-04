@@ -18,6 +18,7 @@ public:
     int getHp() const;
     int getStrength() const;
     int getLevel() const;
+    int getXp() const;
     std::string getName() const;
 
 protected:
