@@ -14,6 +14,11 @@ bool Cave::isClear() const {
     return enemies.empty();
 }
 
+// Clears an enemy from the enemies list
+void Cave::clearEnemy(int enemy) {
+    enemies.erase(enemies.begin()+enemy);
+}
+
 // Returns cave name
 std::string Cave::getName() const {
     return name;

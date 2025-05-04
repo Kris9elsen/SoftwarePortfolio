@@ -16,6 +16,7 @@ public:
     Cave(std::string, std::vector<Enemy>, int);
 
     bool isClear() const;
+    void clearEnemy(int);
 
     int getGold() const;
     std::string getName() const;

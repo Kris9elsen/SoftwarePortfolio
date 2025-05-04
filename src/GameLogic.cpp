@@ -135,7 +135,7 @@ void GameLogic::setCaves(std::vector<Cave> _caves) {
     } else {
         GoblinCaveFactory goblinFactory;
         caves.push_back(goblinFactory.createCave(hero));
-        
+
         return;
     }
 
@@ -168,8 +168,36 @@ void GameLogic::startScreen() {
     return;
 }
 
+// Display Cave selector
+void GameLogic::chooseCaveScreen() {
+    while (true) {
+        std::cout << "\n=== CHOSE A CAVE TO ENTER ===" << std::endl;
+        std::cout << "The Caves are " << std::endl;
+        int index = 0;
+        for (const auto& cave : caves) {
+            std::cout << index << " : "
+                      << cave.getName()
+                      << " Contains " << cave.getGold()
+                      << " Gold." <<std::endl;
+
+            index++;
+        }
+
+        std::cout << "Chose cave to enter by number (q to quit): ";
+        std::string in;
+        std::cin >> in;
+
+        if (in == "q") return;
+
+        chooseEnemyScreen(std::stoi(in));
+
+    }
+
+    return;
+}
+
 // Display Enemy selector
-void GameLogic::chooseEnemyScreen() {
+void GameLogic::chooseEnemyScreen(int cave) {
     while (true) {
         std::cout << "\n=== CHOSE AN ENEMY TO FIGHT" << std::endl;
         std::cout << "Your stats: " 
@@ -179,9 +207,9 @@ void GameLogic::chooseEnemyScreen() {
                 << ", Xp = " << hero.getXp() 
                 << std::endl;
         
-        std::cout << "\n The enemies are " << std::endl;
+        std::cout << "\n The enemies in the cave are " << std::endl;
         int index = 0;
-        for (const auto& enemy : enemies) {
+        for (const auto& enemy : caves[cave].getEnemies()) {
             std::cout << index << " : "
                       << enemy.getName()
                       << ", Hp: " << enemy.getHp()
@@ -192,20 +220,33 @@ void GameLogic::chooseEnemyScreen() {
             index++;
         }
 
-        std::cout << "\nChose enemy to fight by number (q to quit): ";
+        std::cout << "\nChose enemy to fight by number (e to exit cave): ";
         std::string in;
         std::cin >> in;
 
-        if (in == "q") return;
-        fightEnemy(std::stoi(in));
+        if (in == "e") return;
+
+        if (fightEnemy(caves[cave].getEnemies()[std::stoi(in)])) {
+            caves[cave].clearEnemy(std::stoi(in));
+        }
+
+        if (caves[cave].isClear()) {
+            std::cout << "You defeated the " << caves[cave].getName() << std::endl;
+            std::cout << "As a reward " << caves[cave].getGold() << " Gold has been added to your Hero." << std::endl;
+            hero.addGold(caves[cave].getGold());
+            caves.erase(caves.begin()+cave);
+
+            return;
+        }
+
     }
     
+    return;
 }
 
 // Fight against an enemy takes the index of the enemy from the enemies vector
-void GameLogic::fightEnemy(int index) {
+bool GameLogic::fightEnemy(Enemy enemy) {
     int heroHp = hero.getHp();
-    Enemy enemy = enemies[index];
     int enemyHp = enemy.getHp();
 
     std::cout << "\n=== YOU ARE FIGHTING AGAINST ===" << std::endl;
@@ -233,14 +274,14 @@ void GameLogic::fightEnemy(int index) {
 
         hero.addXp(enemy.getXpReward());
 
-        return;
+        return true;
 
     } else {
         std::cout << "You lost against " << enemy.getName() << std::endl;
         std::cout << "Come back stronger and try again." << std::endl;
 
-        return;
+        return false;
     }
 
-    return;
+    return false;
 }

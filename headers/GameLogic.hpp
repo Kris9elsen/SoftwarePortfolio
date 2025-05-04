@@ -24,8 +24,8 @@ public:
     void createHero(std::string);
     void startScreen();
     void chooseCaveScreen();
-    void chooseEnemyScreen();
-    void fightEnemy(int);
+    void chooseEnemyScreen(int);
+    bool fightEnemy(Enemy);
     void saveHero();
     void setCaves(std::vector<Cave> _caves = {});
 
