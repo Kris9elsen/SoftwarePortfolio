@@ -127,20 +127,15 @@ void GameLogic::saveHero() {
 }
 
 // Sets Enemies takes vector<Enemy> or sets to default
-void GameLogic::setEnemies(std::vector<Enemy> _enemies) {
-    if (!_enemies.empty()) {
-        enemies = _enemies;
+void GameLogic::setCaves(std::vector<Cave> _caves) {
+    if (!_caves.empty()) {
+        caves = _caves;
         return;
 
     } else {
-        enemies.push_back(Enemy("Horse", 4, 1, 100));
-        enemies.push_back(Enemy("Weak Goblin", 4, 2, 200));
-        enemies.push_back(Enemy("Strong Goblin", 8, 3, 400));
-        enemies.push_back(Enemy("Stronger Goblin", 10, 4, 500));
-        enemies.push_back(Enemy("The strongest Goblin", 15, 5, 800));
-        enemies.push_back(Enemy("Mokey King", 30, 5, 1000));
-        enemies.push_back(Enemy("Unicorn", 5, 8, 1500));
-
+        GoblinCaveFactory goblinFactory;
+        caves.push_back(goblinFactory.createCave(hero));
+        
         return;
     }
 

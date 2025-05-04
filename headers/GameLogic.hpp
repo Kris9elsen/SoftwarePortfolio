@@ -5,6 +5,8 @@
 
 #include "Hero.hpp"
 #include "Enemy.hpp"
+#include "Cave.hpp"
+#include "GoblinCaveFactory.hpp"
 
 #include <iostream>
 #include <string>
@@ -21,15 +23,16 @@ public:
     void loadHero();
     void createHero(std::string);
     void startScreen();
+    void chooseCaveScreen();
     void chooseEnemyScreen();
     void fightEnemy(int);
     void saveHero();
-    void setEnemies(std::vector<Enemy> _enemies = {});
+    void setCaves(std::vector<Cave> _caves = {});
 
 protected:
     std::string fileName;
     Hero hero;
-    std::vector<Enemy> enemies;
+    std::vector<Cave> caves;
 
 };
 
