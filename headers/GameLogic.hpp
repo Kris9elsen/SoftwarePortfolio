@@ -24,6 +24,7 @@ public:
     void chooseEnemyScreen();
     void fightEnemy(int);
     void saveHero();
+    void setEnemies(std::vector<Enemy> _enemies = {});
 
 protected:
     std::string fileName;
