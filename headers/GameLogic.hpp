@@ -7,6 +7,10 @@
 #include "Enemy.hpp"
 #include "Cave.hpp"
 #include "GoblinCaveFactory.hpp"
+#include "HorseCaveFactory.hpp"
+#include "MonkeyCaveFactory.hpp"
+#include "UnicornCaveFactory.hpp"
+#include "DragonCaveFactory.hpp"
 
 #include <iostream>
 #include <string>

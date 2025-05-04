@@ -139,6 +139,18 @@ void GameLogic::setCaves(std::vector<Cave> _caves) {
         GoblinCaveFactory goblinFactory;
         caves.push_back(goblinFactory.createCave(hero));
 
+        HorseCaveFactory horseFactory;
+        caves.push_back(horseFactory.createCave(hero));
+
+        MonkeyCaveFactory monkeyFactory;
+        caves.push_back(monkeyFactory.createCave(hero));
+
+        UnicornCaveFactory unicornFactory;
+        caves.push_back(unicornFactory.createCave(hero));
+
+        DragonCaveFactory dragonFactory;
+        caves.push_back(dragonFactory.createCave(hero));
+
         return;
     }
 

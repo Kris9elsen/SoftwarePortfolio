@@ -8,7 +8,7 @@
 
 class CaveFactory {
 public:
-    virtual Cave createCave(const Hero&) {};
+    virtual Cave createCave(const Hero& hero) = 0;
     virtual ~CaveFactory() {};
 
 };
