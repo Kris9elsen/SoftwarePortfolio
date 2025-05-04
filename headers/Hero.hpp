@@ -15,10 +15,10 @@ public:
     void addXp(int);
 
     // Getters
-    int getHp();
-    int getStrength();
-    int getLevel();
-    std::string getName();
+    int getHp() const;
+    int getStrength() const;
+    int getLevel() const;
+    std::string getName() const;
 
 protected:
     std::string name;

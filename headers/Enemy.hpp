@@ -17,7 +17,7 @@ public:
     int getXpReward() const;
     std::string getName() const;
 
-private:
+protected:
     std::string name;
     int hp;
     int strength;
