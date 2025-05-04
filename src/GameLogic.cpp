@@ -207,6 +207,45 @@ void GameLogic::chooseEnemyScreen() {
     
 }
 
+// Fight against an enemy takes the index of the enemy from the enemies vector
 void GameLogic::fightEnemy(int index) {
+    int heroHp = hero.getHp();
+    Enemy enemy = enemies[index];
+    int enemyHp = enemy.getHp();
+
+    std::cout << "\n=== YOU ARE FIGHTING AGAINST ===" << std::endl;
+    std::cout << enemy.getName()
+              << ", Hp " << enemyHp
+              << ", Strength " << enemy.getStrength()
+              << ", XP Reward" << enemy.getXpReward()
+              << std::endl;
+
+
+    while (heroHp > 0 && enemyHp > 0) {
+        enemyHp -= hero.getStrength();
+
+        if (enemyHp > 0) heroHp -= enemy.getStrength();
+
+        std::cout << hero.getName() << ", Hp " << heroHp << std::endl;
+        std::cout << enemy.getName() << ", Hp " << enemyHp << std::endl;
+
+    }
+
+    std::cout << "\n=== FIGHT IS OVER ===" << std::endl;
+    if (heroHp > 0) {
+        std::cout << "You won against " << enemy.getName() << std::endl;
+        std::cout << "And recieved " << enemy.getXpReward() << "XP as a reward." << std::endl;
+
+        hero.addXp(enemy.getXpReward());
+
+        return;
+
+    } else {
+        std::cout << "You lost against " << enemy.getName() << std::endl;
+        std::cout << "Come back stronger and try again." << std::endl;
+
+        return;
+    }
+
     return;
 }
