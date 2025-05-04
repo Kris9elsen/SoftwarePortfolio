@@ -3,12 +3,13 @@
 Hero::Hero() {}
 Hero::~Hero() {}
 
-Hero::Hero(std::string _name, int _hp, int _strength, int _level, int _xp) {
+Hero::Hero(std::string _name, int _hp, int _strength, int _level, int _xp, int _gold) {
     name = _name;
     xp = _xp;
     level = _level;
     strength = _strength;
     hp = _hp;
+    gold = _gold;
 }
 
 // Add xp and check for level up
@@ -34,6 +35,11 @@ void Hero::addXp(int xpToAdd) {
     return;
 }
 
+// Add gold to hero
+void Hero::addGold(int _gold) {
+    gold += _gold;
+}
+
 // Getters
 
 // Returns Hp
@@ -53,6 +59,10 @@ int Hero::getLevel() const {
 
 int Hero::getXp() const {
     return xp;
+}
+
+int Hero::getGold() const {
+    return gold;
 }
 
 // Returns Name

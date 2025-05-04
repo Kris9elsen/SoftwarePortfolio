@@ -9,16 +9,18 @@ class Hero {
 public:
     Hero();
     ~Hero();
-    Hero(std::string, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0);
+    Hero(std::string, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0, int _gold = 0);
 
     // Methods
     void addXp(int);
+    void addGold(int);
 
     // Getters
     int getHp() const;
     int getStrength() const;
     int getLevel() const;
     int getXp() const;
+    int getGold() const;
     std::string getName() const;
 
 protected:
@@ -27,6 +29,7 @@ protected:
     int level;
     int strength;
     int hp;
+    int gold;
 
 };
 

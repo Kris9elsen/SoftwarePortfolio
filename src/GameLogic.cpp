@@ -190,7 +190,7 @@ void GameLogic::chooseCaveScreen() {
         if (in == "q") return;
 
         chooseEnemyScreen(std::stoi(in));
-
+        
     }
 
     return;
