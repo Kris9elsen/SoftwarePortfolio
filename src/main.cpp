@@ -6,9 +6,8 @@
 int main() {
     GameLogic game("../saves.txt");
 
-    game.setEnemies();
     game.startScreen();
-    game.chooseEnemyScreen();
-
+    game.setCaves();
+    game.chooseCaveScreen();
     return 0;
 }
