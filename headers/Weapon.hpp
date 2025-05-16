@@ -10,6 +10,8 @@ class Weapon
 public:
     Weapon();
     ~Weapon();
+
+    // string Name, int Damage, int Damage Multiplier, int Price
     Weapon(std::string, int, int, int);
 
     // Getters

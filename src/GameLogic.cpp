@@ -27,7 +27,7 @@ void GameLogic::loadHero() {
     std::string line;
     std::vector<Hero> heros = {};
 
-    std::cout << "\n=== HERORS TO LOAD ===" << std::endl;
+    std::cout << "\n=== HEROES AVAILABLE FOR LOAD ===" << std::endl;
 
     while (std::getline (file, line)) {
         std::stringstream ss(line);
@@ -157,7 +157,7 @@ void GameLogic::setCaves(std::vector<Cave> _caves) {
     return;
 }
 
-// Sets weapons in armory
+// Sets weapons in armory take vecotr<Weapon> or sets default
 void GameLogic::setArmory(std::vector<Weapon> _armory) {
     if (!_armory.empty()) {
         armory = _armory;
@@ -294,7 +294,7 @@ void GameLogic::armoryScreen() {
             index++;
         }
 
-        std::cout << "\nEnter weapon id to by (exit with 'e')";
+        std::cout << "\nEnter weapon id to by (exit with 'e'): ";
         std::string input;
         std::cin >> input;
         
