@@ -3,13 +3,19 @@
 Weapon::Weapon(){}
 Weapon::~Weapon(){}
 
-Weapon::Weapon(int _price, int _damage, int _damageMultiplier) {
+Weapon::Weapon(std::string _name, int _price, int _damage, int _damageMultiplier) {
+    name = _name;
     price = _price;
     damage = _damage;
     damageMultiplier = _damageMultiplier;
 }
 
 // Getters
+
+// Returns weapon name
+std::string Weapon::getName() const {
+    return name;
+}
 
 // Returns weapon price
 int Weapon::getPrice() const {

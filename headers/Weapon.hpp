@@ -3,19 +3,23 @@
 
 #pragma once
 
+#include <string>
+
 class Weapon
 {
 public:
     Weapon();
     ~Weapon();
-    Weapon(int, int, int);
+    Weapon(std::string, int, int, int);
 
     // Getters
+    std::string getName() const;
     int getPrice() const;
     int getDamage() const;
     int getDamageMultiplier() const;
 
 private:
+    std::string name;
     int price;
     int damage;
     int damageMultiplier;

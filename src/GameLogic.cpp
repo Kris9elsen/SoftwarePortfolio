@@ -157,6 +157,24 @@ void GameLogic::setCaves(std::vector<Cave> _caves) {
     return;
 }
 
+// Sets weapons in armory
+void GameLogic::setArmory(std::vector<Weapon> _armory) {
+    if (!_armory.empty()) {
+        armory = _armory;
+        return;
+
+    } else {
+        armory.push_back(Weapon("Dagger", 1, 0, 100));
+        armory.push_back(Weapon("Sword", 5, 1, 500));
+        armory.push_back(Weapon("Morning star", 8, 2, 800));
+        armory.push_back(Weapon("LMG", 20, 10, 2000));
+
+        return;
+    }
+
+    return;
+}
+
 // Display start screen
 void GameLogic::startScreen() {
     std::cout << "\n=== WELCOME TO THE GAME ===" << std::endl;
@@ -257,6 +275,41 @@ void GameLogic::chooseEnemyScreen(int cave) {
 
     }
     
+    return;
+}
+
+void GameLogic::armoryScreen() {
+    while (true) {
+        std::cout << "\n=== AMORY ===" << std::endl;
+
+        int index = 0;
+        for (const auto& weapon : armory) {
+            std::cout << index << " : "
+                    << weapon.getName() 
+                    << " Damage: " << weapon.getDamage() 
+                    << " Damage multiplier: " << weapon.getDamageMultiplier() 
+                    << " Price: " << weapon.getPrice() << " Gold." 
+                    << std::endl;
+
+            index++;
+        }
+
+        std::cout << "\nEnter weapon id to by (exit with 'e')";
+        std::string input;
+        std::cin >> input;
+        
+        if (input == "e") return;
+
+        Weapon weapon = armory[stoi(input)];
+
+        if (weapon.getPrice() > hero.getGold()) {
+            std::cout << "\n Not enough gold to by " << weapon.getName() << std::endl;
+
+        } else {
+            hero.giveWeapon(weapon);
+        }
+    }
+
     return;
 }
 

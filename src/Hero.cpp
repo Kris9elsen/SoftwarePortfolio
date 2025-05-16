@@ -44,6 +44,7 @@ void Hero::addGold(int _gold) {
 
 // Set hero weapon
 void Hero::giveWeapon(Weapon _weapon) {
+    gold -= _weapon.getPrice();
     weapon = _weapon;
 }
 

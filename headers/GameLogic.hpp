@@ -11,6 +11,7 @@
 #include "MonkeyCaveFactory.hpp"
 #include "UnicornCaveFactory.hpp"
 #include "DragonCaveFactory.hpp"
+#include "Weapon.hpp"
 
 #include <iostream>
 #include <string>
@@ -25,18 +26,23 @@ public:
     GameLogic(std::string);
 
     void loadHero();
+    void saveHero();
     void createHero(std::string);
+    void setCaves(std::vector<Cave> _caves = {});
+    void setArmory(std::vector<Weapon> _weapons = {});
+    bool fightEnemy(Enemy);
+
+    // Screens
     void startScreen();
     void chooseCaveScreen();
     void chooseEnemyScreen(int);
-    bool fightEnemy(Enemy);
-    void saveHero();
-    void setCaves(std::vector<Cave> _caves = {});
+    void armoryScreen();
 
 protected:
     std::string fileName;
     Hero hero;
     std::vector<Cave> caves;
+    std::vector<Weapon> armory;
 
 };
 

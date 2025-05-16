@@ -16,8 +16,6 @@ public:
     // Methods
     void addXp(int);
     void addGold(int);
-
-    // Setters
     void giveWeapon(Weapon);
 
     // Getters
