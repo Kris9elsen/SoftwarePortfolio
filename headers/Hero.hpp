@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Weapon.hpp"
+
 #include <string>
 
 class Hero {
@@ -15,6 +17,9 @@ public:
     void addXp(int);
     void addGold(int);
 
+    // Setters
+    void giveWeapon(Weapon);
+
     // Getters
     int getHp() const;
     int getStrength() const;
@@ -22,6 +27,7 @@ public:
     int getXp() const;
     int getGold() const;
     std::string getName() const;
+    Weapon getWeapon() const;
 
 protected:
     std::string name;
@@ -30,6 +36,8 @@ protected:
     int strength;
     int hp;
     int gold;
+
+    Weapon weapon;
 
 };
 

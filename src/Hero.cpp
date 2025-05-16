@@ -40,6 +40,13 @@ void Hero::addGold(int _gold) {
     gold += _gold;
 }
 
+// Setters
+
+// Set hero weapon
+void Hero::giveWeapon(Weapon _weapon) {
+    weapon = _weapon;
+}
+
 // Getters
 
 // Returns Hp
@@ -68,4 +75,9 @@ int Hero::getGold() const {
 // Returns Name
 std::string Hero::getName() const {
     return name;
+}
+
+// Returns heros weapon
+Weapon Hero::getWeapon() const {
+    return weapon;
 }
