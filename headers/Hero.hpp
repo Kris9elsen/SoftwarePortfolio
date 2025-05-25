@@ -6,12 +6,13 @@
 #include "Weapon.hpp"
 
 #include <string>
+#include <optional>
 
 class Hero {
 public:
     Hero();
     ~Hero();
-    Hero(std::string, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0, int _gold = 0);
+    Hero(std::string, int _hp = 10, int _strength = 2, int _level = 1, int _xp = 0, int _gold = 0, std::optional<Weapon> _weapon = std::nullopt);
 
     // Methods
     void addXp(int);

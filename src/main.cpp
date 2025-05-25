@@ -4,7 +4,7 @@
 
 
 int main() {
-    GameLogic game("../saves.txt");
+    GameLogic game("../gameData.db");
 
     
     game.startScreen();

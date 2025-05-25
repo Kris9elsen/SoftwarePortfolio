@@ -3,13 +3,20 @@
 Hero::Hero() {}
 Hero::~Hero() {}
 
-Hero::Hero(std::string _name, int _hp, int _strength, int _level, int _xp, int _gold) {
+Hero::Hero(std::string _name, int _hp, int _strength, int _level, int _xp, int _gold, std::optional<Weapon> _weapon) {
     name = _name;
     xp = _xp;
     level = _level;
     strength = _strength;
     hp = _hp;
     gold = _gold;
+    
+    if (_weapon.has_value()) {
+        weapon = _weapon.value();
+    } else {
+        weapon = Weapon();
+    }
+    
 }
 
 // Add xp and check for level up

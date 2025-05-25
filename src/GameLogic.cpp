@@ -7,9 +7,7 @@ GameLogic::~GameLogic() {
 }
 
 // Create game takes string "saves file name"
-GameLogic::GameLogic(std::string _fileName) {
-    fileName = _fileName;
-}
+GameLogic::GameLogic(std::string fileName) : fileName(fileName), db(fileName) {}
 
 // Create new hero
 void GameLogic::createHero(std::string name) {
@@ -22,46 +20,19 @@ void GameLogic::createHero(std::string name) {
 
 // Load Hero from file
 void GameLogic::loadHero() {
-    std::ifstream file(fileName);
-
-    std::string line;
     std::vector<Hero> heros = {};
 
+    heros = db.loadHero();
+
     std::cout << "\n=== HEROES AVAILABLE FOR LOAD ===" << std::endl;
-
-    while (std::getline (file, line)) {
-        std::stringstream ss(line);
-        std::string name;
-        int hp, strength, level, xp, gold;
-        std::string value;
-
-        std::getline(ss, name, ',');
-        std::getline(ss, value, ','); hp = std::stoi(value);
-        std::getline(ss, value, ','); strength = std::stoi(value);
-        std::getline(ss, value, ','); level = std::stoi(value);
-        std::getline(ss, value, ','); xp = std::stoi(value);
-        std::getline(ss, value, ','); gold = std::stoi(value);
-
-        std::cout << heros.size() << ": " << name 
-                  << ", Hp = " << hp 
-                  << ", Strength = " << strength 
-                  << ", Level = " << level 
-                  << ", Xp = " << xp
-                  << ", Gold = " << gold
-                  << std::endl;
-
-        heros.push_back(Hero(name, hp, strength, level, xp, gold));
-
-    }
-
-    file.close();
+    std::string in;
 
     if (heros.empty()) {
         std::cout << "No heros saved!!" << std::endl;
         std::cout << "Enter name for your new Hero: ";
-        std::cin >> line;
+        std::cin >> in;
 
-        createHero(line);
+        createHero(in);
 
         std::cout << "Playing as: " << hero.getName() 
                   << ", Hp = " << hero.getHp() 
@@ -74,9 +45,22 @@ void GameLogic::loadHero() {
         return;
     }
 
+    int index = 0;
+    for (const auto hero : heros) {
+        std::cout << index << ": " << hero.getName() 
+                  << ", Hp = " << hero.getHp() 
+                  << ", Strength = " << hero.getStrength() 
+                  << ", Level = " << hero.getLevel() 
+                  << ", Xp = " << hero.getXp()
+                  << ", Gold = " << hero.getGold()
+                  << std::endl;
+
+        index ++;
+    }
+
     std::cout << "Enter number of hero to load: ";
-    std::cin >> line;
-    hero = heros[std::stoi(line)];
+    std::cin >> in;
+    hero = heros[std::stoi(in)];
 
     std::cout << "You chose to play as: " << hero.getName() 
               << ", Hp = " << hero.getHp() 
@@ -90,43 +74,9 @@ void GameLogic::loadHero() {
 
 // Saves heror to txt file or updateds if already exists
 void GameLogic::saveHero() {
-    std::ifstream file(fileName);
-    std::vector<std::string> lines;
-    std::string line;
-    bool update = false;
-
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string currentHero;
-        std::getline(ss, currentHero, ',');
-
-        if (currentHero == hero.getName()) {
-            std::stringstream newLine;
-            newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp() << "," << hero.getGold();
-            lines.push_back(newLine.str());
-            update = true;
-        } else {
-            lines.push_back(line);
-        }
-    }
-
-    file.close();
-
-    if (!update) {
-        std::stringstream newLine;
-        newLine << hero.getName() << "," << hero.getHp() << "," << hero.getStrength() << "," << hero.getLevel() << "," << hero.getXp() << "," << hero.getGold();
-        lines.push_back(newLine.str());
-    }
-
-    std::ofstream outfile(fileName);
-    for (const auto& l : lines) {
-        outfile << l << "\n";
-    }
-
-    outfile.close();
+    db.saveHero(hero);
 
     return;
-
 }
 
 // Sets Enemies takes vector<Enemy> or sets to default
@@ -164,10 +114,10 @@ void GameLogic::setArmory(std::vector<Weapon> _armory) {
         return;
 
     } else {
-        armory.push_back(Weapon("Kniv", 5, 0,  20, 500));
+        armory.push_back(Weapon("Knife", 5, 0,  20, 500));
         armory.push_back(Weapon("Stick", 0, 1, 10, 100));
         armory.push_back(Weapon("Metal pipe", 0, 2, 20, 200));
-        armory.push_back(Weapon("Sword", 20, 1, 30, 1500));
+        armory.push_back(Weapon("Sword", 615220, 1, 30, 1500));
         armory.push_back(Weapon("Morning star", 10, 3, 40, 1000));
 
         return;

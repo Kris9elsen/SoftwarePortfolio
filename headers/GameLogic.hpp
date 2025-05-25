@@ -12,6 +12,7 @@
 #include "UnicornCaveFactory.hpp"
 #include "DragonCaveFactory.hpp"
 #include "Weapon.hpp"
+#include "Database.hpp"
 
 #include <iostream>
 #include <string>
@@ -41,6 +42,7 @@ public:
     
 protected:
     std::string fileName;
+    Database db;
     Hero hero;
     std::vector<Cave> caves;
     std::vector<Weapon> armory;

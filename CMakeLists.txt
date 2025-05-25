@@ -19,6 +19,11 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 # Include directories
 include_directories(${HEADER_DIR})
 
+# Find libraries
+find_package(SQLite3 REQUIRED)
+target_include_directories(${PROJECT_NAME} PRIVATE ${SQLite3_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${SQLite3_LIBRARIES})
+
 # Optional: Enable warnings
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
