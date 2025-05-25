@@ -33,10 +33,11 @@ public:
     bool fightEnemy(Enemy);
 
     // Screens
-    void armoryScreen();
     void startScreen();
+    void menuScreen();
     void chooseCaveScreen();
     void chooseEnemyScreen(int);
+    void armoryScreen();
     
 protected:
     std::string fileName;

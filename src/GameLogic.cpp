@@ -164,10 +164,11 @@ void GameLogic::setArmory(std::vector<Weapon> _armory) {
         return;
 
     } else {
-        armory.push_back(Weapon("Dagger", 1, 0, 100));
-        armory.push_back(Weapon("Sword", 5, 1, 500));
-        armory.push_back(Weapon("Morning star", 8, 2, 800));
-        armory.push_back(Weapon("LMG", 20, 10, 2000));
+        armory.push_back(Weapon("Kniv", 5, 0,  20, 500));
+        armory.push_back(Weapon("Stick", 0, 1, 10, 100));
+        armory.push_back(Weapon("Metal pipe", 0, 2, 20, 200));
+        armory.push_back(Weapon("Sword", 20, 1, 30, 1500));
+        armory.push_back(Weapon("Morning star", 10, 3, 40, 1000));
 
         return;
     }
@@ -201,6 +202,26 @@ void GameLogic::startScreen() {
     return;
 }
 
+// Dislay menu screen
+void GameLogic::menuScreen() {
+    while (true) {
+        std::cout << "\n=== MAIN MENU ===" << std::endl;
+        std::cout << "0: Armory (By weapons)" << std::endl;
+        std::cout << "1: Caves (Fight enemies)" << std::endl;
+        std::cout << "2: See statistics" << std::endl;
+        std::cout << "q to quit game" << std::endl;
+
+        std::cout << "Enter choice: ";
+        std::string in;
+        std::cin >> in;
+
+        if (in == "0") armoryScreen();
+        if (in == "1") chooseCaveScreen();
+        if (in == "2") return;
+        if (in == "q") return;
+    }
+}
+
 // Display Cave selector
 void GameLogic::chooseCaveScreen() {
     while (true) {
@@ -216,11 +237,11 @@ void GameLogic::chooseCaveScreen() {
             index++;
         }
 
-        std::cout << "Chose cave to enter by number (q to quit): ";
+        std::cout << "Chose cave to enter by number (e exit to menu): ";
         std::string in;
         std::cin >> in;
 
-        if (in == "q") return;
+        if (in == "e") return;
 
         chooseEnemyScreen(std::stoi(in));
 
@@ -294,7 +315,7 @@ void GameLogic::armoryScreen() {
             index++;
         }
 
-        std::cout << "\nEnter weapon id to by (exit with 'e'): ";
+        std::cout << "\nEnter weapon id to by (e exit to menu): ";
         std::string input;
         std::cin >> input;
         
@@ -327,7 +348,11 @@ bool GameLogic::fightEnemy(Enemy enemy) {
 
 
     while (heroHp > 0 && enemyHp > 0) {
-        enemyHp -= hero.getStrength();
+        if (!hero.getWeapon().getName().empty()) {
+            enemyHp -= hero.useWeapon();
+        } else {
+            enemyHp -= hero.getStrength();
+        }
 
         if (enemyHp > 0) heroHp -= enemy.getStrength();
 

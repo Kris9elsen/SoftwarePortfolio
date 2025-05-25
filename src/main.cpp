@@ -10,8 +10,7 @@ int main() {
     game.startScreen();
     game.setCaves();
     game.setArmory();
-    game.armoryScreen();
-    game.chooseCaveScreen();
+    game.menuScreen();
 
     return 0;
 }

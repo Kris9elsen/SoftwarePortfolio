@@ -17,6 +17,8 @@ public:
     void addXp(int);
     void addGold(int);
     void giveWeapon(Weapon);
+    void removeWeapon();
+    int useWeapon();
 
     // Getters
     int getHp() const;

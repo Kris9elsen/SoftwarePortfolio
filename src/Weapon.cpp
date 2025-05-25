@@ -3,11 +3,18 @@
 Weapon::Weapon(){}
 Weapon::~Weapon(){}
 
-Weapon::Weapon(std::string _name, int _price, int _damage, int _damageMultiplier) {
+Weapon::Weapon(std::string _name, int _damage, int _damageMultiplier, int _durability, int _price) {
     name = _name;
     price = _price;
     damage = _damage;
     damageMultiplier = _damageMultiplier;
+    durability = _durability;
+}
+
+// Methods
+
+void Weapon::use() {
+    durability -= 1;
 }
 
 // Getters
@@ -30,4 +37,9 @@ int Weapon::getDamage() const {
 // Returns damage multiplier
 int Weapon::getDamageMultiplier() const {
     return damageMultiplier;
+}
+
+// Returns durability
+int Weapon::getDurability() const {
+    return durability;
 }

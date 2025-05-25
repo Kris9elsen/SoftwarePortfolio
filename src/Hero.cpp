@@ -40,12 +40,29 @@ void Hero::addGold(int _gold) {
     gold += _gold;
 }
 
-// Setters
-
 // Set hero weapon
 void Hero::giveWeapon(Weapon _weapon) {
-    gold -= _weapon.getPrice();
     weapon = _weapon;
+    gold -= weapon.getPrice();
+    
+}
+
+// Remove weapon from hero
+void Hero::removeWeapon() {
+    weapon = Weapon();
+}
+
+// Use heros weapon for damage
+int Hero::useWeapon() {
+    weapon.use();
+
+    if (weapon.getDurability() <= 0) {
+        removeWeapon();
+
+        return strength;
+    }
+
+    return (strength + weapon.getDamage()) * weapon.getDamageMultiplier();
 }
 
 // Getters
