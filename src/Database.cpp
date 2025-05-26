@@ -296,3 +296,162 @@ void Database::addKill(const std::string heroName, const std::string weaponName)
 
     return;    
 }
+
+// Display all heros alphabetically
+void Database::seeHeros() {
+    std::cout << "\n=== SAVED HEROS ===" << std::endl;
+
+    const char* query = R"(
+        SELECT h.name, h.hp, h.strength, h.level, h.xp, h.gold, 
+               w.name 
+        FROM heros h 
+        LEFT JOIN weapons w ON h.weaponId = w.id 
+        ORDER BY h.name ASC;
+    )";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int hp = sqlite3_column_int(stmt, 1);
+        int strength = sqlite3_column_int(stmt, 2);
+        int level = sqlite3_column_int(stmt, 3);
+        int xp = sqlite3_column_int(stmt, 4);
+        int gold = sqlite3_column_int(stmt, 5);
+
+        std::cout << heroName << " : "
+                  << " Hp = " << hp
+                  << ", Strength = " << strength
+                  << ", Level = " << level
+                  << ", Xp = " << xp
+                  << ", Gold = " << gold;
+
+        if (sqlite3_column_type(stmt, 6) != SQLITE_NULL) {
+            std::string weaponName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+            std::cout << ", Weapon = " << weaponName << std::endl;
+
+        } else {
+            std::cout << ", Weapon = none" << std::endl;
+        }
+
+    }
+
+    sqlite3_finalize(stmt);
+
+    return;
+}
+
+// Display kills per hero
+void Database::seeKillsPerHero() {
+    std::cout << "\n=== KILLS PER HERO ===" << std::endl;
+
+    const char* query = R"(
+        SELECT h.name, COUNT(k.id) AS kill_count 
+        FROM heros h 
+        LEFT JOIN kills k ON h.id = k.heroId 
+        GROUP BY h.id 
+        ORDER BY h.name ASC;
+    )";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int heroKills = sqlite3_column_int(stmt, 1);
+
+        std::cout << heroName << " has " << heroKills << " kills." << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return;
+}
+
+// Shows kills for each weapon used by hero
+void Database::killsByWeaponForHero(std::string heroName) {
+    const char* query = R"(
+        SELECT 
+            COALESCE(w.name, 'unarmed') AS weapon_name,
+            COUNT(k.id) AS kill_count 
+        FROM kills k 
+        INNER JOIN heros h ON h.id = k.heroId 
+        LEFT JOIN weapons w ON k.weaponId = w.id 
+        WHERE h.name = ? 
+        GROUP BY weapon_name 
+        ORDER by kill_count DESC;
+    )";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    if (sqlite3_bind_text(stmt, 1, heroName.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
+        std::cerr << "Failed to bind hero name: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    bool found = false;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string weaponName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int weaponKills = sqlite3_column_int(stmt, 1);
+
+        std::cout << weaponName << ": " << weaponKills << " kills, ";
+        found = true;
+    }
+
+    if (!found) std::cout << "No kills found!";
+
+    sqlite3_finalize(stmt);
+
+    return;
+}
+
+// Show hero with most kills for a weapon
+void Database::killsByHeroForWeapon(std::string weaponName) {
+    const char* query = R"(
+        SELECT h.name, COUNT(k.id) AS kill_count 
+        FROM kills k 
+        INNER JOIN heros h ON h.id = k.heroId 
+        INNER JOIN weapons w ON w.id = k.weaponId 
+        WHERE w.name = ? 
+        GROUP BY h.name 
+        ORDER BY kill_count DESC 
+        LIMIT 1;
+    )";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statment: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    if (sqlite3_bind_text(stmt, 1, weaponName.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
+        std::cerr << "Failed to bind weapon name: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string heroName = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int weaponKills = sqlite3_column_int(stmt, 1);
+
+        std::cout << "Hero with most kills for " << weaponName << " is:\n";
+        std::cout << heroName << " with " << weaponKills << " kills.";
+
+    } else {
+        std::cout << "No kills found!";
+    }
+
+    sqlite3_finalize(stmt);
+
+    return;
+}

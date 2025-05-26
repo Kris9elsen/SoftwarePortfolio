@@ -40,6 +40,7 @@ void GameLogic::loadHero() {
                   << ", Level = " << hero.getLevel() 
                   << ", Xp = " << hero.getXp()
                   << ", Gold = " << hero.getGold()
+                  << ", Weapon = " << hero.getWeapon().getName()
                   << std::endl;
 
         return;
@@ -53,6 +54,7 @@ void GameLogic::loadHero() {
                   << ", Level = " << hero.getLevel() 
                   << ", Xp = " << hero.getXp()
                   << ", Gold = " << hero.getGold()
+                  << ", Weapon = " << hero.getWeapon().getName()
                   << std::endl;
 
         index ++;
@@ -66,7 +68,9 @@ void GameLogic::loadHero() {
               << ", Hp = " << hero.getHp() 
               << ", Strength = " << hero.getStrength() 
               << ", Level = " << hero.getLevel() 
-              << ", Xp = " << hero.getXp() 
+              << ", Xp = " << hero.getXp()
+              << ", Gold = " << hero.getGold()
+              << ", Weapon = " << hero.getWeapon().getName()
               << std::endl;
 
     return;
@@ -167,7 +171,7 @@ void GameLogic::menuScreen() {
 
         if (in == "0") armoryScreen();
         if (in == "1") chooseCaveScreen();
-        if (in == "2") return;
+        if (in == "2") seeStatistics();
         if (in == "q") return;
     }
 }
@@ -210,6 +214,7 @@ void GameLogic::chooseEnemyScreen(int cave) {
                 << ", Level = " << hero.getLevel() 
                 << ", Xp = " << hero.getXp()
                 << ", Gold = " << hero.getGold()
+                << ", Weapon = " << hero.getWeapon().getName()
                 << std::endl;
         
         std::cout << "\n The enemies in the cave are " << std::endl;
@@ -329,4 +334,58 @@ bool GameLogic::fightEnemy(Enemy enemy) {
     }
 
     return false;
+}
+
+// Screen for chosing statistics to see
+void GameLogic::seeStatistics() {
+    while (true) {
+        std::cout << "\n=== SEE GAME STATS ===" << std::endl;
+        std::cout << "0: Show heros.\n1: Show kills per hero.\n2: Show kills per weapon for a hero.\n3: Show hero with most kills for a weapon." << std::endl;
+
+        std::cout << "Enter number for desired option (e to exit): ";
+        std::string in;
+        std::cin >> in;
+
+        if (in == "e") return;
+        if (in == "0") db.seeHeros();
+        if (in == "1") db.seeKillsPerHero();
+        if (in == "2") seeHeroWeaponKills();
+        if (in == "3") seeWeaponHeroKills();
+    }
+    
+    return;
+}
+
+// Screen for chosing hero to se kills with weapons for
+void GameLogic::seeHeroWeaponKills() {
+    std::cout << "\n=== SEE KILLS WITH WEAPONS OF HERO ===" << std::endl;
+
+    while (true) {
+        std::cout << "Enter name of hero to see (e to exit): ";
+        std::string in;
+        std::cin >> in;
+
+        if (in == "e") return;
+        db.killsByWeaponForHero(in);
+        std::cout << std::endl;
+    }
+    
+    return;
+}
+
+// Screen for chosing weapon to se hero with most kills
+void GameLogic::seeWeaponHeroKills() {
+    std::cout << "\n=== SEE HERO WITH MOST KILLS FOR A WEAPON ===" << std::endl;
+
+    while (true) {
+        std::cout << "Enter name of weapon to see (e to exit): ";
+        std::string in;
+        std::cin >> in;
+
+        if (in == "e") return;
+        db.killsByHeroForWeapon(in);
+        std::cout << std::endl;
+    }
+    
+    return;
 }

@@ -39,6 +39,9 @@ public:
     void chooseCaveScreen();
     void chooseEnemyScreen(int);
     void armoryScreen();
+    void seeStatistics();
+    void seeHeroWeaponKills();
+    void seeWeaponHeroKills();
     
 protected:
     std::string fileName;
