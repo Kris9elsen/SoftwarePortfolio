@@ -191,3 +191,30 @@ void Database::saveHero(Hero hero) {
 
     return;
 }
+
+std::vector<Weapon> Database::loadWeapons() {
+    std::vector<Weapon> weapons = {};
+
+    const char* query = R"(
+        SELCET name, damage, multiplier, durability, price FROM weapons ORDER BY price ASC;
+    )";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Faield to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return weapons;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        std::string name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        int damage = sqlite3_column_int(stmt, 1);
+        int multiplier = sqlite3_column_int(stmt, 2);
+        int durability = sqlite3_column_int(stmt, 3);
+        int price = sqlite3_column_int(stmt, 4);
+
+        weapons.emplace_back(name, damage, multiplier, durability, price);
+    }
+
+    sqlite3_finalize(stmt);
+    return weapons;
+}

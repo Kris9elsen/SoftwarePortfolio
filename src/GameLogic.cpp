@@ -109,18 +109,18 @@ void GameLogic::setCaves(std::vector<Cave> _caves) {
 
 // Sets weapons in armory take vecotr<Weapon> or sets default
 void GameLogic::setArmory(std::vector<Weapon> _armory) {
-    if (!_armory.empty()) {
-        armory = _armory;
-        return;
+    armory = _armory;
 
-    } else {
+    if (armory.empty()) {
+        armory = db.loadWeapons();
+    }
+
+    if (armory.empty()) {
         armory.push_back(Weapon("Knife", 5, 0,  20, 500));
         armory.push_back(Weapon("Stick", 0, 1, 10, 100));
         armory.push_back(Weapon("Metal pipe", 0, 2, 20, 200));
         armory.push_back(Weapon("Sword", 615220, 1, 30, 1500));
         armory.push_back(Weapon("Morning star", 10, 3, 40, 1000));
-
-        return;
     }
 
     return;
