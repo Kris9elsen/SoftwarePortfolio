@@ -98,7 +98,12 @@ bool Database::createTables() {
 std::vector<Hero> Database::loadHero() {
     std::vector<Hero> heros;
 
-    const char* query = "SELECT name FROM heros;";
+    const char* query = R"(
+        SELECT h.name, h.hp, h.strength, h.level, h.xp, h.gold,
+           w.name, w.damage, w.multiplier, w.durability, w.price
+        FROM heros h
+        LEFT JOIN weapons w ON h.weaponId = w.id;
+    )";
 
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -157,13 +162,20 @@ void Database::saveHero(Hero hero) {
     }
 
     const char* updateOrInsertHero = R"(
-        INSERT OR REPLACE INTO heros 
-        (id, name, hp, strength, level, xp, gold, weaponId, weaponDurability) 
-        VALUES ( 
-            (SELECT id FROM heros WHERE name = ?), 
-            ?, ?, ?, ?, ?, ?, ?, ? 
-        );
-    )";
+    INSERT OR REPLACE INTO heros 
+    (id, name, hp, strength, level, xp, gold, weaponId, weaponDurability) 
+    VALUES ( 
+        (SELECT id FROM heros WHERE name = ?),  -- 1
+        ?,  -- name                           -- 2
+        ?,  -- hp                             -- 3
+        ?,  -- strength                       -- 4
+        ?,  -- level                          -- 5
+        ?,  -- xp                             -- 6
+        ?,  -- gold                           -- 7
+        ?,  -- weaponId                       -- 8
+        ?   -- weaponDurability               -- 9
+    );
+)";
 
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(db, updateOrInsertHero, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -199,7 +211,7 @@ std::vector<Weapon> Database::loadWeapons() {
     std::vector<Weapon> weapons = {};
 
     const char* query = R"(
-        SELCET name, damage, multiplier, durability, price FROM weapons ORDER BY price ASC;
+        SELECT name, damage, multiplier, durability, price FROM weapons ORDER BY price ASC;
     )";
 
     sqlite3_stmt* stmt;
@@ -226,6 +238,8 @@ std::vector<Weapon> Database::loadWeapons() {
 void Database::addKill(const std::string heroName, const std::string weaponName) {
     int heroId = -1;
     std::optional<int> weaponId = std::nullopt;
+
+    std::cout << heroName << " " << weaponName << std::endl;
     
     const char* getHeroId = "SELECT id FROM heros WHERE name = ?;";
 
@@ -233,7 +247,7 @@ void Database::addKill(const std::string heroName, const std::string weaponName)
     if (sqlite3_prepare_v2(db, getHeroId, -1, &stmt, nullptr) == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, heroName.c_str(), -1, SQLITE_STATIC);
 
-        if (sqlite3_step(stmt) == SQLITE_OK) {
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
             heroId = sqlite3_column_int(stmt, 0);
         }
 
