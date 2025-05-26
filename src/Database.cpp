@@ -65,7 +65,7 @@ bool Database::createTables() {
         CREATE TABLE IF NOT EXISTS kills (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             heroId INTEGER NOT NULL,
-            weaponId INTEGER NOT NULL,
+            weaponId INTEGER,
             FOREIGN KEY(heroId) REFERENCES heros(id),
             FOREIGN KEY(weaponId) REFERENCES weapons(id)
         )
@@ -94,6 +94,7 @@ bool Database::createTables() {
     return true;
 }
 
+// Load heros from database
 std::vector<Hero> Database::loadHero() {
     std::vector<Hero> heros;
 
@@ -133,6 +134,7 @@ std::vector<Hero> Database::loadHero() {
     return heros;
 }
 
+// Save hero stats to database
 void Database::saveHero(Hero hero) {
     int weaponId = 0;
     int weaponDurability = 0;
@@ -192,6 +194,7 @@ void Database::saveHero(Hero hero) {
     return;
 }
 
+// Load weapons from database
 std::vector<Weapon> Database::loadWeapons() {
     std::vector<Weapon> weapons = {};
 
@@ -217,4 +220,65 @@ std::vector<Weapon> Database::loadWeapons() {
 
     sqlite3_finalize(stmt);
     return weapons;
+}
+
+// Add kill to database with hero and weapon used
+void Database::addKill(const std::string heroName, const std::string weaponName) {
+    int heroId = -1;
+    std::optional<int> weaponId = std::nullopt;
+    
+    const char* getHeroId = "SELECT id FROM heros WHERE name = ?;";
+
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(db, getHeroId, -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, heroName.c_str(), -1, SQLITE_STATIC);
+
+        if (sqlite3_step(stmt) == SQLITE_OK) {
+            heroId = sqlite3_column_int(stmt, 0);
+        }
+
+        sqlite3_finalize(stmt);
+    }
+
+    if (!weaponName.empty()) {
+        const char* getWeaponId = "SELECT id FROM weapons WHERE name = ?;";
+        if (sqlite3_prepare_v2(db, getWeaponId, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, weaponName.c_str(), -1, SQLITE_STATIC);
+
+            if (sqlite3_step(stmt) == SQLITE_OK) {
+                weaponId = sqlite3_column_int(stmt, 0);
+            }
+
+            sqlite3_finalize(stmt);
+        }
+    }
+
+    if (heroId != -1) {
+        const char* insertKill = "INSERT INTO kills (heroId, weaponId) VALUES (?, ?);";
+        if (sqlite3_prepare_v2(db, insertKill, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmt, 1, heroId);
+
+            if (weaponId.has_value()) {
+                sqlite3_bind_int(stmt, 2, weaponId.value());
+            } else {
+                sqlite3_bind_null(stmt, 2);
+            }
+
+            if (sqlite3_step(stmt) != SQLITE_DONE) {
+                std::cerr << "Failed to insert kill: " << sqlite3_errmsg(db) << std::endl;
+            }
+
+            sqlite3_finalize(stmt);
+
+        } else {
+            std::cerr << "Failed to prepare insert kill statement: " << sqlite3_errmsg(db) << std::endl;
+
+        }
+
+    } else {
+        std::cerr << "Hero not found. Kill not added.\n" << std::endl;
+
+    }
+
+    return;    
 }

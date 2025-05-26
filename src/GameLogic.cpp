@@ -317,6 +317,7 @@ bool GameLogic::fightEnemy(Enemy enemy) {
         std::cout << "And recieved " << enemy.getXpReward() << "XP as a reward." << std::endl;
 
         hero.addXp(enemy.getXpReward());
+        db.addKill(hero.getName(), hero.getWeapon().getName());
 
         return true;
 

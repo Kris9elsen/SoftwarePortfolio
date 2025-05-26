@@ -23,6 +23,7 @@ public:
     std::vector<Hero> loadHero();
     void saveHero(Hero);
     std::vector<Weapon> loadWeapons();
+    void addKill(const std::string heroName, const std::string weaponName);
 
 private:
     sqlite3* db;
