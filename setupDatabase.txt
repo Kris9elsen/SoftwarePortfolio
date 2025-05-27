@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS weapons (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    damage INTEGER NOT NULL,
+    multiplier INTEGER NOT NULL,
+    durability INTEGER NOT NULL,
+    price INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS heros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    hp INTEGER NOT NULL,
+    strength INTEGER NOT NULL,
+    level INTEGER NOT NULL,
+    xp INTEGER NOT NULL,
+    gold INTEGER NOT NULL,
+    weaponId INTEGER,
+    weaponDurability INTEGER,
+    FOREIGN KEY (weaponId) REFERENCES weapons(id)
+);
+
+CREATE TABLE IF NOT EXISTS kills (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    heroId INTEGER NOT NULL,
+    weaponId INTEGER,
+    FOREIGN KEY (heroId) REFERENCES heros(id),
+    FOREIGN KEY (weaponId) REFERENCES weapons(id)
+);
+
+INSERT INTO weapons (name, damage, multiplier, durability, price) VALUES 
+('Knife', 5, 0, 20, 500),
+('Stick', 0, 1, 10, 100),
+('Metal pipe', 0, 2, 20, 200),
+('Sword', 615220, 1, 30, 1500),
+('Morning star', 10, 3, 40, 1000);
